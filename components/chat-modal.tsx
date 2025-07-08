@@ -176,7 +176,7 @@ export default function ChatModal({ isOpen, onClose, initialMessage = "" }: Chat
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-      <Card className={`w-full max-w-[990px] bg-white shadow-2xl transition-all duration-300 ${
+      <Card className={`w-full max-w-[1100px] bg-white shadow-2xl transition-all duration-300 ${
         isMinimized ? 'h-16' : 'h-[600px]'
       }`}>
         {/* Header */}
