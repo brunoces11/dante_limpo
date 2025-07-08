@@ -1,15 +1,18 @@
-import Header from "@/components/header";
-import Hero from "@/components/hero";
-import Features from "@/components/features";
-import Testimonials from "@/components/testimonials";
+"use client";
 
-export default function Home() {
+import Header from "@/components/header";
+import ChatModal from "@/components/chat-modal";
+
+export default function ChatPrincipalPage() {
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen flex flex-col items-center justify-center bg-white">
       <Header />
-      <Hero />
-      <Features />
-      <Testimonials />
+      <div className="flex-grow flex items-center justify-center">
+        <ChatModal 
+          isOpen={true} 
+          onClose={() => {}} 
+        />
+      </div>
     </main>
   );
-}
+} 
