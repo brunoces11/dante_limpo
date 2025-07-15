@@ -18,38 +18,23 @@ import {
 const agents = [
   {
     icon: FileCheck,
-    title: "Assistente para Qualificação de Títulos",
-    description: "Realiza a qualificação registral de títulos, verificando legalidade, validade e requisitos formais.",
-    features: [
-      "Verifica legalidade e autenticidade do título (Art. 185, VIII)",
-      "Qualificação objetiva e subjetiva (Arts. 167 e 168)",
-      "Identificação de vícios e exigência de complementos",
-      "Decisão de registro ou devolução"
-    ],
+    title: "Agente de Validação de Títulos",
+    description: "Analisa e valida títulos para registro, verificando conformidade com a legislação vigente.",
+    features: ["Verificação automática de conformidade", "Análise de requisitos legais", "Relatório detalhado de pendências"],
     color: "from-blue-500 to-blue-600"
   },
   {
     icon: FileText,
-    title: "Calculador de Emolumentos",
-    description: "Calcula os emolumentos de atos notariais e registrais com base na tabela vigente e normas aplicáveis.",
-    features: [
-      "Cálculo automático segundo tabela vigente",
-      "Isenções e gratuidades legais",
-      "Emissão de recibos conforme art. 197",
-      "Integração ao controle de receitas e despesas"
-    ],
+    title: "Agente para Análise de Documentos",
+    description: "Examina documentos registrais identificando inconsistências, erros e requisitos pendentes de forma automatizada.",
+    features: ["Análise completa de documentos", "Detecção automática de erros", "Sugestões de correção"],
     color: "from-green-500 to-green-600"
   },
   {
     icon: Search,
-    title: "Assistente de Notas de Exigência",
-    description: "Gera notas devolutivas fundamentadas com base em defeitos e omissões encontrados nos títulos.",
-    features: [
-      "Elaboração de nota fundamentada (Art. 189)",
-      "Indicação de normas violadas",
-      "Instruções para suscitação de dúvida",
-      "Protocolo e arquivamento da devolução (Arts. 191 e 193)"
-    ],
+    title: "Agente Extrator de Entidades",
+    description: "Extrai informações relevantes de documentos como nomes, CPFs, endereços, valores e datas automaticamente.",
+    features: ["Extração automática de dados", "Estruturação de informações", "Validação cruzada de dados"],
     color: "from-purple-500 to-purple-600"
   },
   {

@@ -50,7 +50,7 @@ export default function ChatModal({ isOpen, onClose, initialMessage = "" }: Chat
 
   const sendToLangflow = async (message: string): Promise<string> => {
     try {
-      const response = await fetch('https://lf142.prompt-master.org/api/v1/run/a476cf1c-9390-4828-b119-47cd00e10a79?stream=false', {
+      const response = await fetch('https://lf142.prompt-master.org/api/v1/run/1060b727-10e5-4597-aa26-4662f5bccd46?stream=false', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -187,36 +187,13 @@ export default function ChatModal({ isOpen, onClose, initialMessage = "" }: Chat
             </div>
             <div>
               <h3 className="text-lg font-semibold text-neutral-900">
-                Dante AI - RI
+                Dante AI - Registro de Imoveis / Santa Catarina
               </h3>
               <div className="flex items-center space-x-2">
                 <div className="h-2 w-2 bg-green-500 rounded-full"></div>
                 <span className="text-xs text-neutral-500">Especialista Online</span>
               </div>
             </div>
-          </div>
-          
-          <div className="flex items-center space-x-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsMinimized(!isMinimized)}
-              className="h-8 w-8 p-0"
-            >
-              {isMinimized ? (
-                <Maximize2 className="h-4 w-4" />
-              ) : (
-                <Minimize2 className="h-4 w-4" />
-              )}
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onClose}
-              className="h-8 w-8 p-0"
-            >
-              <X className="h-4 w-4" />
-            </Button>
           </div>
         </CardHeader>
 

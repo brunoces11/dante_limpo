@@ -62,7 +62,7 @@ export default function Hero() {
             
             {/* Subtitle */}
             <p className="mt-6 text-xl leading-8 text-neutral-700">
-              Dante é uma IA avançada especializada exclusivamente em Registro de Imóveis.
+              Dante é uma IA avançada especializada fornecer embasamento jurídico para cartórios e registros imobiliários
               Respostas objetivas, concisas e rigorosamente baseadas na legislação vigente.
             </p>
 
@@ -104,7 +104,7 @@ export default function Hero() {
               </div>
               
               <p className="mt-4 text-sm text-neutral-600">
-                ⚖️ Especialista em RI • ⚡ Respostas instantâneas • 🤖 Baseado em legislação
+              🏛️ Especialista em Registro de Imóveis • ⚖️ Baseado em legislação
               </p>
             </div>
           </div>
