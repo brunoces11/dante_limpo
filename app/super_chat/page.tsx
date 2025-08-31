@@ -1,15 +1,19 @@
 "use client";
 
 import Header from "@/components/header";
-import ChatSessao from "@/components/chat-sessao";
+import ChatModal from "@/components/chat-modal";
 
-export default function ChatPrincipalPage() {
+export default function SuperChatPage() {
   return (
     <main className="min-h-screen bg-white">
       <Header />
       <div className="container mx-auto px-4 py-8">
-        <div className="max-w-7xl mx-auto">
-          <ChatSessao />
+        <div className="max-w-4xl mx-auto">
+          <ChatModal 
+            isOpen={true} 
+            onClose={() => {}} 
+            embedded={true}
+          />
         </div>
       </div>
       <div className="w-full flex justify-center pb-4">
@@ -19,4 +23,4 @@ export default function ChatPrincipalPage() {
       </div>
     </main>
   );
-} 
+}

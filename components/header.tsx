@@ -23,7 +23,7 @@ export default function Header() {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <header className="sticky top-0 z-[1000] w-full border-b border-neutral-200 bg-white/80 backdrop-blur-lg shadow-[0_2px_6px_0_rgba(0,0,0,0.07)]">
+    <header className="sticky top-0 z-[1000] w-full border-b border-neutral-200 bg-white/74 backdrop-blur-md shadow-[0_2px_9px_0_rgba(0,0,0,0.07)]">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
@@ -68,6 +68,12 @@ export default function Header() {
                     <Link href="/ui" className="block px-2 py-2 rounded hover:bg-orange-50 text-neutral-900 font-medium">
                       UI Components
                     </Link>
+                    <Link href="/super_chat" className="block px-2 py-2 rounded hover:bg-orange-50 text-neutral-900 font-medium">
+                      Super Chat
+                    </Link>
+                    <Link href="/chat-sessao" className="block px-2 py-2 rounded hover:bg-orange-50 text-neutral-900 font-medium">
+                      Chat Sessão
+                    </Link>
                   </PopoverContent>
                 </Popover>
               </div>
@@ -78,7 +84,7 @@ export default function Header() {
         {/* Desktop CTA */}
         <div className="hidden md:flex items-center space-x-2">
           <Link href="/chat_principal">
-            <Button size="sm" className="bg-neutral-900 text-white hover:bg-neutral-800">
+            <Button size="sm" className="mr-2 bg-neutral-900 text-white hover:bg-neutral-800">
               💬 Iniciar Chat
             </Button>
           </Link>

@@ -3,7 +3,7 @@
 import Header from "@/components/header";
 import ChatSessao from "@/components/chat-sessao";
 
-export default function ChatPrincipalPage() {
+export default function ChatSessaoPage() {
   return (
     <main className="min-h-screen bg-white">
       <Header />

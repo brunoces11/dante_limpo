@@ -12,12 +12,13 @@ import {
   Send, 
   Scale, 
   User, 
-  Minimize2, 
-  Maximize2,
   Copy,
   ThumbsUp,
   ThumbsDown,
-  Loader2
+  Loader2,
+  Plus,
+  MessageSquare,
+  Trash2
 } from "lucide-react";
 
 interface Message {
@@ -28,26 +29,44 @@ interface Message {
   isLoading?: boolean;
 }
 
-interface ChatModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  initialMessage?: string;
-  embedded?: boolean;
+interface ChatSession {
+  id: string;
+  title: string;
+  messages: Message[];
+  createdAt: Date;
+  lastActivity: Date;
 }
 
-export default function ChatModal({ isOpen, onClose, initialMessage = "", embedded = false }: ChatModalProps) {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      content: 'Olá! Sou Dante, uma IA especializada exclusivamente em Registro de Imóveis. Como posso ajudar você hoje? Você pode me perguntar sobre procedimentos registrais, qualificação de títulos, legislação aplicável ou qualquer dúvida técnica sobre RI.',
-      sender: 'bot',
-      timestamp: new Date()
-    }
-  ]);
+interface ChatSessaoProps {
+  className?: string;
+}
+
+export default function ChatSessao({ className = "" }: ChatSessaoProps) {
+  const [sessions, setSessions] = useState<ChatSession[]>([]);
+  const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isMinimized, setIsMinimized] = useState(false);
-  const [hasProcessedInitialMessage, setHasProcessedInitialMessage] = useState(false);
+
+  // Inicializar com uma sessão padrão
+  useEffect(() => {
+    const defaultSession: ChatSession = {
+      id: 'default',
+      title: 'Nova Conversa',
+      messages: [{
+        id: '1',
+        content: 'Olá! Sou Dante, uma IA especializada exclusivamente em Registro de Imóveis. Como posso ajudar você hoje? Você pode me perguntar sobre procedimentos registrais, qualificação de títulos, legislação aplicável ou qualquer dúvida técnica sobre RI.',
+        sender: 'bot',
+        timestamp: new Date()
+      }],
+      createdAt: new Date(),
+      lastActivity: new Date()
+    };
+    
+    setSessions([defaultSession]);
+    setCurrentSessionId('default');
+  }, []);
+
+  const currentSession = sessions.find(s => s.id === currentSessionId);
 
   const sendToLangflow = async (message: string): Promise<string> => {
     try {
@@ -69,7 +88,6 @@ export default function ChatModal({ isOpen, onClose, initialMessage = "", embedd
 
       const data = await response.json();
       
-      // Extrair a resposta do Langflow - ajuste conforme a estrutura real da resposta
       if (data && data.outputs && data.outputs.length > 0) {
         const output = data.outputs[0];
         if (output.outputs && output.outputs.length > 0) {
@@ -80,7 +98,6 @@ export default function ChatModal({ isOpen, onClose, initialMessage = "", embedd
         }
       }
       
-      // Fallback se a estrutura for diferente
       return data.result || data.response || data.output || 'Desculpe, não consegui processar sua mensagem. Tente novamente.';
       
     } catch (error) {
@@ -89,21 +106,58 @@ export default function ChatModal({ isOpen, onClose, initialMessage = "", embedd
     }
   };
 
-  const handleSendMessage = async (messageToSend?: string) => {
-    const messageText = messageToSend || inputValue;
-    if (!messageText.trim() || isLoading) return;
+  const createNewSession = () => {
+    const newSession: ChatSession = {
+      id: Date.now().toString(),
+      title: 'Nova Conversa',
+      messages: [{
+        id: '1',
+        content: 'Olá! Sou Dante, uma IA especializada exclusivamente em Registro de Imóveis. Como posso ajudar você hoje?',
+        sender: 'bot',
+        timestamp: new Date()
+      }],
+      createdAt: new Date(),
+      lastActivity: new Date()
+    };
+    
+    setSessions(prev => [newSession, ...prev]);
+    setCurrentSessionId(newSession.id);
+  };
+
+  const deleteSession = (sessionId: string) => {
+    if (sessions.length <= 1) return; // Não deletar se for a única sessão
+    
+    setSessions(prev => prev.filter(s => s.id !== sessionId));
+    
+    if (currentSessionId === sessionId) {
+      const remainingSessions = sessions.filter(s => s.id !== sessionId);
+      setCurrentSessionId(remainingSessions[0]?.id || null);
+    }
+  };
+
+  const handleSendMessage = async () => {
+    if (!inputValue.trim() || isLoading || !currentSessionId) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
-      content: messageText,
+      content: inputValue,
       sender: 'user',
       timestamp: new Date()
     };
 
-    setMessages(prev => [...prev, userMessage]);
-    if (!messageToSend) {
-      setInputValue('');
-    }
+    // Atualizar sessão atual com nova mensagem
+    setSessions(prev => prev.map(session => 
+      session.id === currentSessionId 
+        ? {
+            ...session,
+            messages: [...session.messages, userMessage],
+            lastActivity: new Date(),
+            title: session.title === 'Nova Conversa' ? inputValue.slice(0, 30) + '...' : session.title
+          }
+        : session
+    ));
+
+    setInputValue('');
     setIsLoading(true);
 
     // Adicionar mensagem de loading
@@ -114,53 +168,50 @@ export default function ChatModal({ isOpen, onClose, initialMessage = "", embedd
       timestamp: new Date(),
       isLoading: true
     };
-    setMessages(prev => [...prev, loadingMessage]);
+
+    setSessions(prev => prev.map(session => 
+      session.id === currentSessionId 
+        ? { ...session, messages: [...session.messages, loadingMessage] }
+        : session
+    ));
 
     try {
-      const botResponse = await sendToLangflow(messageText);
+      const botResponse = await sendToLangflow(inputValue);
       
-      // Remover mensagem de loading e adicionar resposta real
-      setMessages(prev => {
-        const withoutLoading = prev.filter(msg => !msg.isLoading);
-        return [...withoutLoading, {
-          id: (Date.now() + 2).toString(),
-          content: botResponse,
-          sender: 'bot',
-          timestamp: new Date()
-        }];
-      });
+      // Remover loading e adicionar resposta
+      setSessions(prev => prev.map(session => 
+        session.id === currentSessionId 
+          ? {
+              ...session,
+              messages: session.messages.filter(msg => !msg.isLoading).concat({
+                id: (Date.now() + 2).toString(),
+                content: botResponse,
+                sender: 'bot',
+                timestamp: new Date()
+              }),
+              lastActivity: new Date()
+            }
+          : session
+      ));
     } catch (error) {
-      // Remover mensagem de loading e adicionar mensagem de erro
-      setMessages(prev => {
-        const withoutLoading = prev.filter(msg => !msg.isLoading);
-        return [...withoutLoading, {
-          id: (Date.now() + 2).toString(),
-          content: 'Desculpe, ocorreu um erro ao processar sua mensagem. Tente novamente.',
-          sender: 'bot',
-          timestamp: new Date()
-        }];
-      });
+      // Remover loading e adicionar erro
+      setSessions(prev => prev.map(session => 
+        session.id === currentSessionId 
+          ? {
+              ...session,
+              messages: session.messages.filter(msg => !msg.isLoading).concat({
+                id: (Date.now() + 2).toString(),
+                content: 'Desculpe, ocorreu um erro ao processar sua mensagem. Tente novamente.',
+                sender: 'bot',
+                timestamp: new Date()
+              })
+            }
+          : session
+      ));
     } finally {
       setIsLoading(false);
     }
   };
-
-  // Process initial message when modal opens
-  useEffect(() => {
-    if (isOpen && initialMessage.trim() && !hasProcessedInitialMessage) {
-      setHasProcessedInitialMessage(true);
-      // Small delay to ensure modal is fully rendered
-      setTimeout(() => {
-        handleSendMessage(initialMessage);
-      }, 100);
-    }
-    
-    // Reset when modal closes
-    if (!isOpen) {
-      setHasProcessedInitialMessage(false);
-      setInputValue("");
-    }
-  }, [isOpen, initialMessage, hasProcessedInitialMessage]);
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -169,57 +220,93 @@ export default function ChatModal({ isOpen, onClose, initialMessage = "", embedd
     }
   };
 
-  // Handle ESC key for modal mode only
-  useEffect(() => {
-    if (!embedded) {
-      const handleEscKey = (e: KeyboardEvent) => {
-        if (e.key === 'Escape' && isOpen) {
-          onClose();
-        }
-      };
-
-      document.addEventListener('keydown', handleEscKey);
-      return () => document.removeEventListener('keydown', handleEscKey);
-    }
-  }, [embedded, isOpen, onClose]);
-
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
   };
 
-  if (!embedded && !isOpen) return null;
+  return (
+    <div className={`flex h-[600px] bg-white border border-neutral-200 rounded-lg shadow-lg ${className}`}>
+      {/* Sidebar */}
+      <div className="w-80 border-r border-neutral-200 flex flex-col">
+        {/* Header do Sidebar */}
+        <div className="p-4 border-b border-neutral-200">
+          <Button 
+            onClick={createNewSession}
+            className="w-full bg-orange-500 text-white hover:bg-orange-600"
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            Novo Chat
+          </Button>
+        </div>
 
-  const cardContent = (
-    <Card className={`${
-      embedded 
-        ? 'w-full h-[600px] border border-neutral-200 shadow-lg' 
-        : `w-full max-w-[1100px] bg-white shadow-2xl transition-all duration-300 ${
-            isMinimized ? 'h-16' : 'h-[600px]'
-          }`
-    }`}>
-        {/* Header */}
-        <CardHeader className="flex flex-row items-center justify-between p-4 border-b border-neutral-200">
-          <div className="flex items-center space-x-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-orange-500 to-orange-600">
-              <Scale className="h-4 w-4 text-white" />
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-neutral-900">
-                Dante AI - Registro de Imoveis / Santa Catarina
-              </h3>
-              <div className="flex items-center space-x-2">
-                <div className="h-2 w-2 bg-green-500 rounded-full"></div>
-                <span className="text-xs text-neutral-500">Especialista Online</span>
+        {/* Lista de Sessões */}
+        <div className="flex-1 overflow-y-auto p-2">
+          {sessions.map((session) => (
+            <div
+              key={session.id}
+              className={`p-3 mb-2 rounded-lg cursor-pointer transition-colors group ${
+                currentSessionId === session.id 
+                  ? 'bg-orange-50 border border-orange-200' 
+                  : 'hover:bg-neutral-50'
+              }`}
+              onClick={() => setCurrentSessionId(session.id)}
+            >
+              <div className="flex items-start justify-between">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center mb-1">
+                    <MessageSquare className="h-4 w-4 text-neutral-500 mr-2 flex-shrink-0" />
+                    <span className="text-sm font-medium text-neutral-900 truncate">
+                      {session.title}
+                    </span>
+                  </div>
+                  <p className="text-xs text-neutral-500">
+                    {session.lastActivity.toLocaleDateString()} às {session.lastActivity.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </p>
+                </div>
+                {sessions.length > 1 && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="opacity-0 group-hover:opacity-100 h-6 w-6 p-0 text-neutral-400 hover:text-red-500"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteSession(session.id);
+                    }}
+                  >
+                    <Trash2 className="h-3 w-3" />
+                  </Button>
+                )}
               </div>
             </div>
-          </div>
-        </CardHeader>
+          ))}
+        </div>
+      </div>
 
-        {!isMinimized && (
+      {/* Área do Chat */}
+      <div className="flex-1 flex flex-col">
+        {currentSession && (
           <>
+            {/* Header do Chat */}
+            <CardHeader className="flex flex-row items-center justify-between p-4 border-b border-neutral-200">
+              <div className="flex items-center space-x-3">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-orange-500 to-orange-600">
+                  <Scale className="h-4 w-4 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-neutral-900">
+                    Dante AI - Registro de Imóveis
+                  </h3>
+                  <div className="flex items-center space-x-2">
+                    <div className="h-2 w-2 bg-green-500 rounded-full"></div>
+                    <span className="text-xs text-neutral-500">Especialista Online</span>
+                  </div>
+                </div>
+              </div>
+            </CardHeader>
+
             {/* Messages */}
-            <CardContent className="flex-1 overflow-y-auto p-4 space-y-4 h-[400px]">
-              {messages.map((message) => (
+            <CardContent className="flex-1 overflow-y-auto p-4 space-y-4">
+              {currentSession.messages.map((message) => (
                 <div
                   key={message.id}
                   className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
@@ -252,31 +339,15 @@ export default function ChatModal({ isOpen, onClose, initialMessage = "", embedd
                       ) : (
                         <>
                           {message.sender === 'bot' ? (
-                            <div className="prose prose-sm max-w-none prose-headings:text-neutral-900 prose-p:text-neutral-700 prose-strong:text-neutral-900 prose-code:text-orange-600 prose-code:bg-orange-50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-neutral-800 prose-pre:text-white prose-blockquote:border-orange-500 prose-blockquote:text-neutral-600 prose-ul:text-neutral-700 prose-ol:text-neutral-700 prose-li:text-neutral-700">
-                              <ReactMarkdown 
-                                remarkPlugins={[remarkGfm]}
-                                components={{
-                                  h1: ({children}) => <h1 className="text-xl font-bold text-neutral-900 mb-2">{children}</h1>,
-                                  h2: ({children}) => <h2 className="text-lg font-semibold text-neutral-900 mb-2">{children}</h2>,
-                                  h3: ({children}) => <h3 className="text-base font-medium text-neutral-900 mb-1">{children}</h3>,
-                                  p: ({children}) => <p className="text-sm leading-relaxed text-neutral-700 mb-2 last:mb-0">{children}</p>,
-                                  strong: ({children}) => <strong className="font-semibold text-neutral-900">{children}</strong>,
-                                  em: ({children}) => <em className="italic text-neutral-700">{children}</em>,
-                                  ul: ({children}) => <ul className="list-disc list-inside text-sm text-neutral-700 mb-2 space-y-1">{children}</ul>,
-                                  ol: ({children}) => <ol className="list-decimal list-inside text-sm text-neutral-700 mb-2 space-y-1">{children}</ol>,
-                                  li: ({children}) => <li className="text-sm text-neutral-700">{children}</li>,
-                                  code: ({children}) => <code className="text-orange-600 bg-orange-50 px-1 py-0.5 rounded text-xs font-mono">{children}</code>,
-                                  pre: ({children}) => <pre className="bg-neutral-800 text-white p-3 rounded-lg text-xs overflow-x-auto mb-2">{children}</pre>,
-                                  blockquote: ({children}) => <blockquote className="border-l-4 border-orange-500 pl-3 text-neutral-600 italic mb-2">{children}</blockquote>,
-                                  img: ({src, alt}) => <img src={src} alt={alt} className="max-w-full h-auto rounded-lg mb-2" />,
-                                  a: ({href, children}) => <a href={href} className="text-orange-600 hover:text-orange-700 underline" target="_blank" rel="noopener noreferrer">{children}</a>
-                                }}
-                              >
+                            <div className="prose prose-sm max-w-none">
+                              <ReactMarkdown remarkPlugins={[remarkGfm]}>
                                 {message.content}
                               </ReactMarkdown>
                             </div>
                           ) : (
-                            <p className="text-sm leading-relaxed whitespace-pre-wrap text-white">{message.content}</p>
+                            <p className="text-sm leading-relaxed whitespace-pre-wrap">
+                              {message.content}
+                            </p>
                           )}
                           <div className="flex items-center justify-between mt-2">
                             <span className={`text-xs ${
@@ -327,7 +398,7 @@ export default function ChatModal({ isOpen, onClose, initialMessage = "", embedd
                   disabled={isLoading}
                 />
                 <Button
-                  onClick={() => handleSendMessage()}
+                  onClick={handleSendMessage}
                   disabled={!inputValue.trim() || isLoading}
                   className="bg-orange-500 text-white hover:bg-orange-600"
                 >
@@ -355,14 +426,7 @@ export default function ChatModal({ isOpen, onClose, initialMessage = "", embedd
             </div>
           </>
         )}
-      </Card>
-  );
-
-  return embedded ? (
-    cardContent
-  ) : (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-      {cardContent}
+      </div>
     </div>
   );
 }
