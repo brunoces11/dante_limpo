@@ -1,14 +1,6 @@
 import '../globals.css';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import Assinatura from "@/components/assinatura";
-
-const inter = Inter({ 
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap',
-  fallback: ['system-ui', 'arial'],
-});
 
 export const metadata: Metadata = {
   title: 'Dante AI - IA Especializada em Registro de Imóveis',
@@ -62,8 +54,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR" className={inter.variable}>
-      <body className={`${inter.className} antialiased`}>
+    <html lang="pt-BR">
+      <body className="antialiased">
         {children}
         <Assinatura />
       </body>
