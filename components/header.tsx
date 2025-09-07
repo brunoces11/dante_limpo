@@ -22,6 +22,14 @@ export default function Header() {
 
   const isActive = (path: string) => pathname === path;
 
+  const formatPathName = (path: string) => {
+    return path
+      .replace("/", "")
+      .replace(/-/g, " ")
+      .replace(/\b\w/g, l => l.toUpperCase())
+      .replace("De Ia", "de IA");
+  };
+
   return (
     <header className="sticky top-0 z-[1000] w-full border-b border-neutral-200 bg-white/70 backdrop-blur-md shadow-[0_2px_9px_0_rgba(0,0,0,0.07)]">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -47,7 +55,7 @@ export default function Header() {
                         : "text-neutral-700 hover:text-neutral-900 hover:bg-neutral-900/5"
                     )}
                   >
-                    {path.replace("/", "").replace(/-/g, " ").replace(/\b\w/g, l => l.toUpperCase()).replace("De Ia", "de IA")}
+                    {formatPathName(path)}
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
@@ -138,7 +146,7 @@ export default function Header() {
                     isActive(path) ? "text-orange-600" : "text-neutral-700"
                   )}
                 >
-                  {path.replace("/", "").replace(/-/g, " ").replace(/\b\w/g, l => l.toUpperCase()).replace("De Ia", "de IA")}
+                  {formatPathName(path)}
                 </Link>
               ))}
               <Link href="/chat_principal">
