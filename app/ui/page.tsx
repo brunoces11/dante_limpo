@@ -11,21 +11,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Switch } from "@/components/ui/switch";
-import { Checkbox } from "@/components/ui/checkbox";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
-import { Progress } from "@/components/ui/progress";
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { Calendar } from "@/components/ui/calendar";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
-import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { Drawer, DrawerTrigger, DrawerContent } from "@/components/ui/drawer";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
@@ -34,6 +24,31 @@ import { Pagination, PaginationContent, PaginationItem, PaginationLink } from "@
 
 // Dynamically import components that might have SSR issues
 const DynamicCalendar = dynamic(() => import("@/components/ui/calendar").then(mod => ({ default: mod.Calendar })), { ssr: false });
+const DynamicTabs = dynamic(() => import("@/components/ui/tabs").then(mod => ({ default: mod.Tabs })), { ssr: false });
+const DynamicTabsList = dynamic(() => import("@/components/ui/tabs").then(mod => ({ default: mod.TabsList })), { ssr: false });
+const DynamicTabsTrigger = dynamic(() => import("@/components/ui/tabs").then(mod => ({ default: mod.TabsTrigger })), { ssr: false });
+const DynamicTabsContent = dynamic(() => import("@/components/ui/tabs").then(mod => ({ default: mod.TabsContent })), { ssr: false });
+const DynamicSwitch = dynamic(() => import("@/components/ui/switch").then(mod => ({ default: mod.Switch })), { ssr: false });
+const DynamicCheckbox = dynamic(() => import("@/components/ui/checkbox").then(mod => ({ default: mod.Checkbox })), { ssr: false });
+const DynamicRadioGroup = dynamic(() => import("@/components/ui/radio-group").then(mod => ({ default: mod.RadioGroup })), { ssr: false });
+const DynamicRadioGroupItem = dynamic(() => import("@/components/ui/radio-group").then(mod => ({ default: mod.RadioGroupItem })), { ssr: false });
+const DynamicSelect = dynamic(() => import("@/components/ui/select").then(mod => ({ default: mod.Select })), { ssr: false });
+const DynamicSelectTrigger = dynamic(() => import("@/components/ui/select").then(mod => ({ default: mod.SelectTrigger })), { ssr: false });
+const DynamicSelectValue = dynamic(() => import("@/components/ui/select").then(mod => ({ default: mod.SelectValue })), { ssr: false });
+const DynamicSelectContent = dynamic(() => import("@/components/ui/select").then(mod => ({ default: mod.SelectContent })), { ssr: false });
+const DynamicSelectItem = dynamic(() => import("@/components/ui/select").then(mod => ({ default: mod.SelectItem })), { ssr: false });
+const DynamicSlider = dynamic(() => import("@/components/ui/slider").then(mod => ({ default: mod.Slider })), { ssr: false });
+const DynamicProgress = dynamic(() => import("@/components/ui/progress").then(mod => ({ default: mod.Progress })), { ssr: false });
+const DynamicAccordion = dynamic(() => import("@/components/ui/accordion").then(mod => ({ default: mod.Accordion })), { ssr: false });
+const DynamicAccordionItem = dynamic(() => import("@/components/ui/accordion").then(mod => ({ default: mod.AccordionItem })), { ssr: false });
+const DynamicAccordionTrigger = dynamic(() => import("@/components/ui/accordion").then(mod => ({ default: mod.AccordionTrigger })), { ssr: false });
+const DynamicAccordionContent = dynamic(() => import("@/components/ui/accordion").then(mod => ({ default: mod.AccordionContent })), { ssr: false });
+const DynamicPopover = dynamic(() => import("@/components/ui/popover").then(mod => ({ default: mod.Popover })), { ssr: false });
+const DynamicPopoverTrigger = dynamic(() => import("@/components/ui/popover").then(mod => ({ default: mod.PopoverTrigger })), { ssr: false });
+const DynamicPopoverContent = dynamic(() => import("@/components/ui/popover").then(mod => ({ default: mod.PopoverContent })), { ssr: false });
+const DynamicTooltip = dynamic(() => import("@/components/ui/tooltip").then(mod => ({ default: mod.Tooltip })), { ssr: false });
+const DynamicTooltipTrigger = dynamic(() => import("@/components/ui/tooltip").then(mod => ({ default: mod.TooltipTrigger })), { ssr: false });
+const DynamicTooltipContent = dynamic(() => import("@/components/ui/tooltip").then(mod => ({ default: mod.TooltipContent })), { ssr: false });
 const DynamicDialog = dynamic(() => import("@/components/ui/dialog").then(mod => ({ default: mod.Dialog })), { ssr: false });
 const DynamicDialogTrigger = dynamic(() => import("@/components/ui/dialog").then(mod => ({ default: mod.DialogTrigger })), { ssr: false });
 const DynamicDialogContent = dynamic(() => import("@/components/ui/dialog").then(mod => ({ default: mod.DialogContent })), { ssr: false });
@@ -80,91 +95,91 @@ export default function UIShowcasePage() {
           <Card>
             <CardHeader>Tabs</CardHeader>
             <CardContent>
-              <Tabs defaultValue="tab1">
-                <TabsList>
-                  <TabsTrigger value="tab1">Tab 1</TabsTrigger>
-                  <TabsTrigger value="tab2">Tab 2</TabsTrigger>
-                </TabsList>
-                <TabsContent value="tab1">Conteúdo da Tab 1</TabsContent>
-                <TabsContent value="tab2">Conteúdo da Tab 2</TabsContent>
-              </Tabs>
+              <DynamicTabs defaultValue="tab1">
+                <DynamicTabsList>
+                  <DynamicTabsTrigger value="tab1">Tab 1</DynamicTabsTrigger>
+                  <DynamicTabsTrigger value="tab2">Tab 2</DynamicTabsTrigger>
+                </DynamicTabsList>
+                <DynamicTabsContent value="tab1">Conteúdo da Tab 1</DynamicTabsContent>
+                <DynamicTabsContent value="tab2">Conteúdo da Tab 2</DynamicTabsContent>
+              </DynamicTabs>
             </CardContent>
           </Card>
           {/* Switch */}
           <Card>
             <CardHeader>Switch</CardHeader>
             <CardContent>
-              <Switch />
+              <DynamicSwitch />
             </CardContent>
           </Card>
           {/* Checkbox */}
           <Card>
             <CardHeader>Checkbox</CardHeader>
             <CardContent>
-              <Checkbox />
+              <DynamicCheckbox />
             </CardContent>
           </Card>
           {/* RadioGroup */}
           <Card>
             <CardHeader>Radio Group</CardHeader>
             <CardContent>
-              <RadioGroup defaultValue="1">
+              <DynamicRadioGroup defaultValue="1">
                 <div className="space-y-2">
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="1" id="r1" />
+                    <DynamicRadioGroupItem value="1" id="r1" />
                     <label htmlFor="r1" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                       Opção 1
                     </label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="2" id="r2" />
+                    <DynamicRadioGroupItem value="2" id="r2" />
                     <label htmlFor="r2" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                       Opção 2
                     </label>
                   </div>
                 </div>
-              </RadioGroup>
+              </DynamicRadioGroup>
             </CardContent>
           </Card>
           {/* Select */}
           <Card>
             <CardHeader>Select</CardHeader>
             <CardContent>
-              <Select>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Selecione" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="a">A</SelectItem>
-                  <SelectItem value="b">B</SelectItem>
-                </SelectContent>
-              </Select>
+              <DynamicSelect>
+                <DynamicSelectTrigger className="w-[180px]">
+                  <DynamicSelectValue placeholder="Selecione" />
+                </DynamicSelectTrigger>
+                <DynamicSelectContent>
+                  <DynamicSelectItem value="a">A</DynamicSelectItem>
+                  <DynamicSelectItem value="b">B</DynamicSelectItem>
+                </DynamicSelectContent>
+              </DynamicSelect>
             </CardContent>
           </Card>
           {/* Slider */}
           <Card>
             <CardHeader>Slider</CardHeader>
             <CardContent>
-              <Slider defaultValue={[50]} max={100} step={1} className="w-40" />
+              <DynamicSlider defaultValue={[50]} max={100} step={1} className="w-40" />
             </CardContent>
           </Card>
           {/* Progress */}
           <Card>
             <CardHeader>Progress</CardHeader>
             <CardContent>
-              <Progress value={60} className="w-40" />
+              <DynamicProgress value={60} className="w-40" />
             </CardContent>
           </Card>
           {/* Accordion */}
           <Card>
             <CardHeader>Accordion</CardHeader>
             <CardContent>
-              <Accordion type="single" collapsible>
-                <AccordionItem value="item-1">
-                  <AccordionTrigger>Item 1</AccordionTrigger>
-                  <AccordionContent>Conteúdo do item 1</AccordionContent>
-                </AccordionItem>
-              </Accordion>
+              <DynamicAccordion type="single" collapsible>
+                <DynamicAccordionItem value="item-1">
+                  <DynamicAccordionTrigger>Item 1</DynamicAccordionTrigger>
+                  <DynamicAccordionContent>Conteúdo do item 1</DynamicAccordionContent>
+                </DynamicAccordionItem>
+              </DynamicAccordion>
             </CardContent>
           </Card>
           {/* Alert */}
@@ -232,24 +247,24 @@ export default function UIShowcasePage() {
           <Card>
             <CardHeader>Popover</CardHeader>
             <CardContent>
-              <Popover>
-                <PopoverTrigger asChild>
+              <DynamicPopover>
+                <DynamicPopoverTrigger asChild>
                   <Button>Mostrar Popover</Button>
-                </PopoverTrigger>
-                <PopoverContent>Conteúdo do Popover</PopoverContent>
-              </Popover>
+                </DynamicPopoverTrigger>
+                <DynamicPopoverContent>Conteúdo do Popover</DynamicPopoverContent>
+              </DynamicPopover>
             </CardContent>
           </Card>
           {/* Tooltip */}
           <Card>
             <CardHeader>Tooltip</CardHeader>
             <CardContent>
-              <Tooltip>
-                <TooltipTrigger asChild>
+              <DynamicTooltip>
+                <DynamicTooltipTrigger asChild>
                   <Button>Hover me</Button>
-                </TooltipTrigger>
-                <TooltipContent>Tooltip de exemplo</TooltipContent>
-              </Tooltip>
+                </DynamicTooltipTrigger>
+                <DynamicTooltipContent>Tooltip de exemplo</DynamicTooltipContent>
+              </DynamicTooltip>
             </CardContent>
           </Card>
           {/* Sheet */}
