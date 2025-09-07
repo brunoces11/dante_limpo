@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import dynamic from "next/dynamic";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Header from "@/components/header";
 import Assinatura from "@/components/assinatura";
@@ -30,6 +31,20 @@ import { Drawer, DrawerTrigger, DrawerContent } from "@/components/ui/drawer";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink } from "@/components/ui/pagination";
+
+// Dynamically import components that might have SSR issues
+const DynamicCalendar = dynamic(() => import("@/components/ui/calendar").then(mod => ({ default: mod.Calendar })), { ssr: false });
+const DynamicDialog = dynamic(() => import("@/components/ui/dialog").then(mod => ({ default: mod.Dialog })), { ssr: false });
+const DynamicDialogTrigger = dynamic(() => import("@/components/ui/dialog").then(mod => ({ default: mod.DialogTrigger })), { ssr: false });
+const DynamicDialogContent = dynamic(() => import("@/components/ui/dialog").then(mod => ({ default: mod.DialogContent })), { ssr: false });
+const DynamicDialogHeader = dynamic(() => import("@/components/ui/dialog").then(mod => ({ default: mod.DialogHeader })), { ssr: false });
+const DynamicDialogTitle = dynamic(() => import("@/components/ui/dialog").then(mod => ({ default: mod.DialogTitle })), { ssr: false });
+const DynamicSheet = dynamic(() => import("@/components/ui/sheet").then(mod => ({ default: mod.Sheet })), { ssr: false });
+const DynamicSheetTrigger = dynamic(() => import("@/components/ui/sheet").then(mod => ({ default: mod.SheetTrigger })), { ssr: false });
+const DynamicSheetContent = dynamic(() => import("@/components/ui/sheet").then(mod => ({ default: mod.SheetContent })), { ssr: false });
+const DynamicDrawer = dynamic(() => import("@/components/ui/drawer").then(mod => ({ default: mod.Drawer })), { ssr: false });
+const DynamicDrawerTrigger = dynamic(() => import("@/components/ui/drawer").then(mod => ({ default: mod.DrawerTrigger })), { ssr: false });
+const DynamicDrawerContent = dynamic(() => import("@/components/ui/drawer").then(mod => ({ default: mod.DrawerContent })), { ssr: false });
 
 export default function UIShowcasePage() {
   return (
@@ -193,24 +208,24 @@ export default function UIShowcasePage() {
           <Card>
             <CardHeader>Calendar</CardHeader>
             <CardContent>
-              <Calendar mode="single" selected={new Date()} onSelect={() => {}} />
+              <DynamicCalendar mode="single" selected={new Date()} onSelect={() => {}} />
             </CardContent>
           </Card>
           {/* Dialog */}
           <Card>
             <CardHeader>Dialog</CardHeader>
             <CardContent>
-              <Dialog>
-                <DialogTrigger asChild>
+              <DynamicDialog>
+                <DynamicDialogTrigger asChild>
                   <Button>Abrir Dialog</Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Exemplo de Dialog</DialogTitle>
-                  </DialogHeader>
+                </DynamicDialogTrigger>
+                <DynamicDialogContent>
+                  <DynamicDialogHeader>
+                    <DynamicDialogTitle>Exemplo de Dialog</DynamicDialogTitle>
+                  </DynamicDialogHeader>
                   Conteúdo do Dialog
-                </DialogContent>
-              </Dialog>
+                </DynamicDialogContent>
+              </DynamicDialog>
             </CardContent>
           </Card>
           {/* Popover */}
@@ -241,24 +256,24 @@ export default function UIShowcasePage() {
           <Card>
             <CardHeader>Sheet</CardHeader>
             <CardContent>
-              <Sheet>
-                <SheetTrigger asChild>
+              <DynamicSheet>
+                <DynamicSheetTrigger asChild>
                   <Button>Abrir Sheet</Button>
-                </SheetTrigger>
-                <SheetContent>Conteúdo do Sheet</SheetContent>
-              </Sheet>
+                </DynamicSheetTrigger>
+                <DynamicSheetContent>Conteúdo do Sheet</DynamicSheetContent>
+              </DynamicSheet>
             </CardContent>
           </Card>
           {/* Drawer */}
           <Card>
             <CardHeader>Drawer</CardHeader>
             <CardContent>
-              <Drawer>
-                <DrawerTrigger asChild>
+              <DynamicDrawer>
+                <DynamicDrawerTrigger asChild>
                   <Button>Abrir Drawer</Button>
-                </DrawerTrigger>
-                <DrawerContent>Conteúdo do Drawer</DrawerContent>
-              </Drawer>
+                </DynamicDrawerTrigger>
+                <DynamicDrawerContent>Conteúdo do Drawer</DynamicDrawerContent>
+              </DynamicDrawer>
             </CardContent>
           </Card>
           {/* Table */}
