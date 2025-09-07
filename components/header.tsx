@@ -23,7 +23,7 @@ export default function Header() {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <header className="sticky top-0 z-[1000] w-full border-b border-neutral-200 bg-white/74 backdrop-blur-md shadow-[0_2px_9px_0_rgba(0,0,0,0.07)]">
+    <header className="sticky top-0 z-[1000] w-full border-b border-neutral-200 bg-white/70 backdrop-blur-md shadow-[0_2px_9px_0_rgba(0,0,0,0.07)]">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
