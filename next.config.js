@@ -6,9 +6,6 @@ const nextConfig = {
   },
   images: { unoptimized: true },
   optimizeFonts: false,
-  experimental: {
-    webpackBuildWorker: true,
-  },
   webpack: (config, { dev }) => {
     if (dev) {
       config.cache = false;
