@@ -95,13 +95,19 @@ export default function UIShowcasePage() {
             <CardHeader>Radio Group</CardHeader>
             <CardContent>
               <RadioGroup defaultValue="1">
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="1" id="r1" />
-                  <label htmlFor="r1">Opção 1</label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="2" id="r2" />
-                  <label htmlFor="r2">Opção 2</label>
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="1" id="r1" />
+                    <label htmlFor="r1" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                      Opção 1
+                    </label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="2" id="r2" />
+                    <label htmlFor="r2" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                      Opção 2
+                    </label>
+                  </div>
                 </div>
               </RadioGroup>
             </CardContent>
